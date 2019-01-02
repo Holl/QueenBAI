@@ -1,5 +1,5 @@
 module.exports = function(creepObject){
-	// The function of scan mind is to gather information for making any choices.
+	// The function of the scan queen is to gather information for making any choices.
 	// The object returned is bits of information used by the other minds
 	// to determine actions.
 
@@ -134,7 +134,8 @@ module.exports = function(creepObject){
 	    
 	    var outsideSources = {};
 	    var localTerritoryFlags = [];
-	    var localCapture = [];
+	    var localCaptureFlags = [];
+	    var mysteryRoomFlags = [];
 	    
 	   // Flags are used to identify other territories under our "Control",
 	   // know as our territory.  Mining and defending these areas are the resposibility
@@ -142,7 +143,6 @@ module.exports = function(creepObject){
 	   
 	   // Control points to capture are marked in the same way.
 	   
-	   var mysteryRoomFlags = [];
 	    
 	    for (flag in Game.flags){
 	        var flagMemory = Game.flags[flag].memory;
@@ -164,7 +164,7 @@ module.exports = function(creepObject){
                     }
     	        }
     	        if (flagMemory.action == "capture"){
-    	            
+    	        	localCaptureFlags.push(flag);
     	        }
     	    }
     	}
@@ -174,11 +174,16 @@ module.exports = function(creepObject){
         // Build and return the info.
 
 	    var localDataObject = {
+	    	// Main info:
 	        "spawnName": spawn,
+	    	"localLevel": localLevel,
 	        "localTerritoryFlags": localTerritoryFlags,
-	        "scoutCreeps": scoutCreeps,
+	        "localCaptureFlags": localCaptureFlags,
 	        "mysteryRoomFlags": mysteryRoomFlags,
 	        "knownTerritory": knownTerritory,
+	        "localSources": localSources,
+	    	"outsideSources": outsideSources,
+	        // Creeps:
 	    	"starterCreeps": starterCreeps,
 	    	"workerCreeps": workerCreeps,
 	    	"upgraderCreeps": upgraderCreeps,
@@ -186,15 +191,15 @@ module.exports = function(creepObject){
 	    	"defenderCreeps": defenderCreeps,
 	    	"builderCreeps": builderCreeps,
 	    	"haulerCreeps": haulerCreeps,
-	    	"defensivePower": defensivePower,
-	    	"hostilePower": hostilePower,
-	    	"localLevel": localLevel,
-	    	"localSources": localSources,
-	    	"outsideSources": outsideSources,
+	    	"scoutCreeps": scoutCreeps,
+	    	// Creep info:
 	    	"harvesterTargets":harvesterTargets,
 	    	"haulerTargets":haulerTargets,
 	    	"workerTargets": workerTargets,
 	    	"wallCount": wallCount,
+	    	// Military:
+	    	"defensivePower": defensivePower,
+	    	"hostilePower": hostilePower,
 		}
 		
 	    scanData['localData'].push(localDataObject);
@@ -217,8 +222,6 @@ function runTerritoryScan(creep){
         "contructionSites": contructionSites,
         "hostileCreeps": hostileCreeps
     }
-    
-    
 }
 
 function getUnitPower(creep){

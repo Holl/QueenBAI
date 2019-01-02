@@ -1,6 +1,6 @@
 var roleHarvester = require('bee.harvester');
 var roleScout = require('bee.scout');
-var roleCarpenderBee = require('bee.builder');
+var roleCarpenderBee = require('bee.carpender');
 var roleWorker = require("bee.worker");
 var roleHauler = require("bee.hauler");
 var roleDefender = require("bee.defender");

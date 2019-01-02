@@ -25,6 +25,23 @@ module.exports = function(scanData){
     
     var creepLevel = calculateLevel(energyNow, energyMax, scanData['harvesterCreeps'], scanData['workerCreeps']);
     console.log("For spawn "+ spawnName + ", Creator Mind calculates creep level to be at " + creepLevel + ".");
+
+    // First and most importantly, local economy.
+
+    for (var i=0; i < scanData['localSources'].length;  i++){
+        var workersMax = calculateCreepMaximums(scanData['localSources'][i], spawnName);
+        console.log("For " + spawnName + "'s Source number " + i +", " + workersMax + " workers are needed.");
+        if(checkTargetedCreepsAmount(scanData, 'harvesterTargets', harvestersMax, i, 'localSources')){
+            console.log(spawnName + " wants to build a harvester for source " + i + '.');
+            creepCreator(spawnName, 'harvester', {role:'harvester', 'source':scanData['localSources'][i],'spawn': spawnName}, creepLevel); 
+            break;
+        }
+        else if (checkTargetedCreepsAmount(scanData, 'workerTargets', workersMax, i, 'localSources')){
+            creepCreator(spawnName, 'worker', {role:'worker', 'source':scanData['localSources'][i], 'spawn': spawnName}, creepLevel);
+            console.log(spawnName + " wants to build a worker for source " + i + '.');
+            break;
+        }
+    }
     
     // If our calculated hostile power is higher than our defensive power,
     // spin up defensive units.
@@ -56,21 +73,6 @@ module.exports = function(scanData){
                 console.log(spawnName + " wants to build a hauler for source " + i + ' in a nearby territory.');
                 creepCreator(spawnName, 'hauler', {role:'hauler', 'source':thisTerritory['sources'][y].id,'spawn': spawnName}, creepLevel);     
             }
-        }
-    }
-    
-    for (var i=0; i < scanData['localSources'].length;  i++){
-        var workersMax = calculateCreepMaximums(scanData['localSources'][i], spawnName);
-        console.log("For " + spawnName + "'s Source number " + i +", " + workersMax + " workers are needed.");
-        if(checkTargetedCreepsAmount(scanData, 'harvesterTargets', harvestersMax, i, 'localSources')){
-            console.log(spawnName + " wants to build a harvester for source " + i + '.');
-            creepCreator(spawnName, 'harvester', {role:'harvester', 'source':scanData['localSources'][i],'spawn': spawnName}, creepLevel); 
-            break;
-        }
-        else if (checkTargetedCreepsAmount(scanData, 'workerTargets', workersMax, i, 'localSources')){
-            creepCreator(spawnName, 'worker', {role:'worker', 'source':scanData['localSources'][i], 'spawn': spawnName}, creepLevel);
-            console.log(spawnName + " wants to build a worker for source " + i + '.');
-            break;
         }
     }
     
