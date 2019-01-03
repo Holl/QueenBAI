@@ -81,6 +81,12 @@ module.exports = function(scanData){
                 }
             }
         }
+
+        for (var i=0; i < scanData['localCaptureFlags'].length; i++){
+            if (scanData['captureCreeps'] < 1){
+                creepCreator(spawnName, 'capture', {role:'capture', flag: scanData['localCaptureFlags'][i], spawn: spawnName}, creepLevel);
+            }
+        }
         
         // Finally, builders.  Builders are pretty static at the moment.
         // If we have walls, and current builders are below appropriate levels, spin one up.

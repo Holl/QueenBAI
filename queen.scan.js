@@ -28,6 +28,7 @@ module.exports = function(creepObject){
 		var harvesterTargets = {};
 		var defenderCreeps = 0;
 		var workerCreeps = 0;
+		var captureCreeps = 0;
 		var builderCreeps = 0;
 		var defensivePower = 0;
 		var haulerCreeps = 0;
@@ -120,6 +121,9 @@ module.exports = function(creepObject){
 		        if(creepRole == 'upgrader'){
 		            upgraderCreeps++;
 		        }
+		        if (creepRole == 'capture'){
+		        	captureCreeps++;
+		        }
 		    }
 		}
 
@@ -192,6 +196,7 @@ module.exports = function(creepObject){
 	    	"builderCreeps": builderCreeps,
 	    	"haulerCreeps": haulerCreeps,
 	    	"scoutCreeps": scoutCreeps,
+	    	"captureCreeps": captureCreeps,
 	    	// Creep info:
 	    	"harvesterTargets":harvesterTargets,
 	    	"haulerTargets":haulerTargets,

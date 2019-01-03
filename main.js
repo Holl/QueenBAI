@@ -6,6 +6,7 @@ var roleHauler = require("bee.hauler");
 var roleDefender = require("bee.defender");
 var roleWorker = require("bee.worker");
 var roleTower = require("bee.tower");
+var roleCapture = require("bee.capture");
 
 var scan = require('queen.scan');
 var create = require('queen.creator');
@@ -46,6 +47,9 @@ module.exports.loop = function () {
         }
         if (creep.memory.role == 'scout'){
             roleScout.run(creep);
+        }
+        if (creep.memory.role == 'capture'){
+            roleCapture.run(creep);
         }
     }
     

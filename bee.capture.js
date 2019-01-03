@@ -1,12 +1,15 @@
 var roleCaptureBee = {
     run: function(creep) {
-        var flag= Game.flags[creep.memory.flag];
+        var flag = Game.flags[creep.memory.flag];
         if (flag){
             if (flag.pos.roomName != creep.pos.roomName){
                 creep.moveTo(flag);
             }
+            else if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE){
+                creep.moveTo(creep.room.controller);
+            }
             else{
-                creep.moveTo(flag);
+                creep.claimController(creep.room.controller);
             }   
         }
         else{
