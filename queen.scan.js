@@ -6,19 +6,6 @@ module.exports = function(creepObject){
 	// The following loop is for scanning each local spawn room, not anything empire-wide.
 
 	var scanData = {"empireData":{}, "localData":[]};
-	
-	creepObject = {};
-	
-    // Because creeps can belong to a spawn even though the creep is in a different room,
-    // this checks all the creeps and organizes them by spawn.
-	for (creep in Game.creeps){
-	    if (creepObject[Game.creeps[creep].memory.spawn]){
-	        creepObject[Game.creeps[creep].memory.spawn].push(Game.creeps[creep]);
-	    }
-	    else{
-	        creepObject[Game.creeps[creep].memory.spawn] = [Game.creeps[creep]];
-	    }
-	};
 
 	for(var spawn in Game.spawns){
 	    // All the basic info to get and to count as we look around the empire.
