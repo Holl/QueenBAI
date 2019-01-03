@@ -1,16 +1,19 @@
 var roleHauler = {
     run: function(creep) {
         if(creep.carry.energy == 0){
-            var targetSourceName = creep.memory.source;
-            var target = Game.getObjectById(targetSourceName).pos.findInRange(
-                FIND_DROPPED_RESOURCES,
-                1
-            )[0];
-            if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target.pos, {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
-            if(!target){
-                creep.moveTo(Game.getObjectById(targetSourceName).pos);
+            var targetSourceName = creep.memory.source; 
+            if (Game.getObjectById(targetSourceName)){
+                var target = Game.getObjectById(targetSourceName).pos.findInRange(
+                    FIND_DROPPED_RESOURCES,
+                    1
+                )[0];
+    
+                if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target.pos, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+                if(!target){
+                    creep.moveTo(Game.getObjectById(targetSourceName).pos);
+                }
             }
         }
         
@@ -27,7 +30,7 @@ var roleHauler = {
             }
             
         }
-	}
+    }
 };
 
 module.exports = roleHauler;

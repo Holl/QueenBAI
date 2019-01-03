@@ -28,62 +28,68 @@ module.exports = function(scanData){
 
     // First and most importantly, local economy.
 
+    var localCreep = false;
+
     for (var i=0; i < scanData['localSources'].length;  i++){
         var workersMax = calculateCreepMaximums(scanData['localSources'][i], spawnName);
         console.log("For " + spawnName + "'s Source number " + i +", " + workersMax + " workers are needed.");
         if(checkTargetedCreepsAmount(scanData, 'harvesterTargets', harvestersMax, i, 'localSources')){
             console.log(spawnName + " wants to build a harvester for source " + i + '.');
             creepCreator(spawnName, 'harvester', {role:'harvester', 'source':scanData['localSources'][i],'spawn': spawnName}, creepLevel); 
+            localCreep = true;
             break;
         }
         else if (checkTargetedCreepsAmount(scanData, 'workerTargets', workersMax, i, 'localSources')){
             creepCreator(spawnName, 'worker', {role:'worker', 'source':scanData['localSources'][i], 'spawn': spawnName}, creepLevel);
             console.log(spawnName + " wants to build a worker for source " + i + '.');
+            localCreep = true;
             break;
         }
     }
     
-    // If our calculated hostile power is higher than our defensive power,
-    // spin up defensive units.
-    
-    if (scanData['hostilePower('] > (scanData['defensivePower'] + 100)){
-        console.log("Defense spinning up!");
-        creepCreator(spawnName, 'defender', {role:'defender'}, creepLevel); 
-    }
-    
-    // Management of local territory.
-    // We have a list of flags in rooms we want controlled by this spawn,
-    // as well as scans from those territories we don't have.
-    
-    for (var i=0; i < scanData['mysteryRoomFlags'].length;  i++){
-        if (scanData['scoutCreeps'] < 1){
-            console.log("We're creating a scout, but in a pretty dumb way.");
-            creepCreator(spawnName, 'scout', {role:'scout','spawn': spawnName, 'flag':Game.flags[scanData['mysteryRoomFlags'][i]].name}, 1); 
+    if (!localCreep){
+
+        // If our calculated hostile power is higher than our defensive power,
+        // spin up defensive units.
+        
+        if (scanData['hostilePower('] > (scanData['defensivePower'] + 100)){
+            console.log("Defense spinning up!");
+            creepCreator(spawnName, 'defender', {role:'defender'}, creepLevel); 
         }
-    }
-    
-    for (var i=0; i < scanData['knownTerritory'].length;  i++){
-        var thisTerritory = scanData['knownTerritory'][i];
-        for (var y=0; y < thisTerritory['sources'].length; y++){
-            if (scanData['harvesterTargets'][thisTerritory['sources'][y].id] < 1 || !scanData['harvesterTargets'][thisTerritory['sources'][y].id]){
-                console.log(spawnName + " wants to build a harvester for source " + i + ' in a nearby territory.');
-                creepCreator(spawnName, 'harvester', {role:'harvester', 'source':thisTerritory['sources'][y].id,'spawn': spawnName}, creepLevel);     
-            }
-            if (scanData['haulerTargets'][thisTerritory['sources'][y].id] < 2 || !scanData['haulerTargets'][thisTerritory['sources'][y].id]){
-                console.log(spawnName + " wants to build a hauler for source " + i + ' in a nearby territory.');
-                creepCreator(spawnName, 'hauler', {role:'hauler', 'source':thisTerritory['sources'][y].id,'spawn': spawnName}, creepLevel);     
+        
+        // Management of local territory.
+        // We have a list of flags in rooms we want controlled by this spawn,
+        // as well as scans from those territories we don't have.
+        
+        for (var i=0; i < scanData['mysteryRoomFlags'].length;  i++){
+            if (scanData['scoutCreeps'] < 1){
+                console.log("We're creating a scout, but in a pretty dumb way.");
+                creepCreator(spawnName, 'scout', {role:'scout','spawn': spawnName, 'flag':Game.flags[scanData['mysteryRoomFlags'][i]].name}, 1); 
             }
         }
+        
+        for (var i=0; i < scanData['knownTerritory'].length;  i++){
+            var thisTerritory = scanData['knownTerritory'][i];
+            for (var y=0; y < thisTerritory['sources'].length; y++){
+                if (scanData['harvesterTargets'][thisTerritory['sources'][y].id] < 1 || !scanData['harvesterTargets'][thisTerritory['sources'][y].id]){
+                    console.log(spawnName + " wants to build a harvester for source " + i + ' in a nearby territory.');
+                    creepCreator(spawnName, 'harvester', {role:'harvester', 'source':thisTerritory['sources'][y].id,'spawn': spawnName}, creepLevel);     
+                }
+                if (scanData['haulerTargets'][thisTerritory['sources'][y].id] < 2 || !scanData['haulerTargets'][thisTerritory['sources'][y].id]){
+                    console.log(spawnName + " wants to build a hauler for source " + i + ' in a nearby territory.');
+                    creepCreator(spawnName, 'hauler', {role:'hauler', 'source':thisTerritory['sources'][y].id,'spawn': spawnName}, creepLevel);     
+                }
+            }
+        }
+        
+        // Finally, builders.  Builders are pretty static at the moment.
+        // If we have walls, and current builders are below appropriate levels, spin one up.
+        
+        if (scanData['wallCount'] > 0 &&(scanData['builderCreeps'] < builderMax)){
+            creepCreator(spawnName, 'builder', {role:'builder', 'source':scanData['localSources'][0], 'spawn': spawnName}, creepLevel);
+            console.log(spawnName + " wants to build a builder.");
+        }
     }
-    
-    // Finally, builders.  Builders are pretty static at the moment.
-    // If we have walls, and current builders are below appropriate levels, spin one up.
-    
-    if (scanData['wallCount'] > 0 &&(scanData['builderCreeps'] < builderMax)){
-        creepCreator(spawnName, 'builder', {role:'builder', 'source':scanData['localSources'][0], 'spawn': spawnName}, creepLevel);
-        console.log(spawnName + " wants to build a builder.");
-    }
-    
 }
 
 function calculateLevel(energyCurrent, energyMax, harvesterCount, workerCount){
