@@ -83,8 +83,34 @@ module.exports = function(scanData){
         }
 
         for (var i=0; i < scanData['localCaptureFlags'].length; i++){
-            if (scanData['captureCreeps'] < 1){
+            var flag = Game.flags[scanData['localCaptureFlags'][i]];
+            var kevinNess = flag.room.controller.owner.username == "KEVIN";
+            if (scanData['captureCreeps'] < 1 && !kevinNess){
+                console.log("Sending a spawn to capture the controller near " + scanData['localCaptureFlags'][i]);
                 creepCreator(spawnName, 'capture', {role:'capture', flag: scanData['localCaptureFlags'][i], spawn: spawnName}, creepLevel);
+            }
+            else{
+                var roomCreeps = flag.room.find(FIND_CREEPS);
+                var roomSources =  flag.room.find(FIND_SOURCES);
+                var newSpawn = flag.memory.newSpawn;
+                var harvesterCreeps = 0;
+                var workerCreeps = 0;
+                for (var y=0; y < roomCreeps.length; y++){
+                    if (roomCreeps[y].memory.role == "harvester"){
+                        harvesterCreeps++;
+                    }
+                    if (roomCreeps[y].memory.role == "worker"){
+                        workerCreeps++;
+                    }
+                }
+                if (harvesterCreeps < 1){
+                    console.log("We're building an capture harvester.");
+                    // creepCreator(spawnName, 'harvester', {role:'harvester', 'source':roomSources[0].id, 'spawn': newSpawn}, creepLevel);
+                }
+                if (workerCreeps < 2){
+                    console.log("We're build capture workers.");
+                    // creepCreator(spawnName, 'worker', {role:'worker', 'source':roomSources[0].id, 'spawn': newSpawn}, creepLevel);
+                }
             }
         }
         
