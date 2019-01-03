@@ -148,12 +148,22 @@ function getBody(role, level){
         case "defender": return getBody_Defender(level);
         case "hauler": return getBody_Hauler(level);
         case "scout": return getBody_Scout(level);
+        case "capture": return getBody_Capture(level);
     }
 }
 
 function getBody_Scout(level){
     switch (level){
         case 1: return [MOVE];
+    }
+}
+
+function getBody_Capture(level){
+    switch (level){
+        case 1: return [CAPTURE, MOVE];
+        case 2: return [CAPTURE, MOVE];
+        case 3: return [CAPTURE, MOVE];
+        case 4: return [CAPTURE, MOVE];
     }
 }
 
