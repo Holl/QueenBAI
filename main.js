@@ -1,3 +1,22 @@
+// 
+//   QueenBAI
+//     _  _
+//    | )/ )
+// \\ |//,' __
+// (")(_)-"()))=-
+//    (\\
+// 
+// Flag requirements:
+//  Mining outside territories:
+//      1) Spawn  = Spawn to mine from
+//      2) Action = 'mine'
+//  Capturing (flag should stay as long as support is needed):
+//      1) Spawn    = Spawn to capture from
+//      2) Action   = 'capture'
+//      3) newSpawn = Name of spawn to be created
+
+
+
 var roleHarvester = require('bee.harvester');
 var roleScout = require('bee.scout');
 var roleCarpenderBee = require('bee.carpender');
@@ -28,8 +47,9 @@ module.exports.loop = function () {
     };
 
     var scanData = scan(creepObject);
-    
+    var allSpawns = [];
     for (var i=0; i < scanData['localData'].length;  i++){
+        allSpawns.push(scanData['localData'][i]['spawnName']);
         // Run the main spawning logic:
         create(scanData['localData'][i]);
         // Run the orders:
@@ -58,12 +78,40 @@ module.exports.loop = function () {
             }
         }
         
-
         // Room tower orders:
         var towers = Game.spawns[scanData['localData'][i]['spawnName']].room.find(FIND_STRUCTURES,
             {filter: {structureType: STRUCTURE_TOWER}});
         for (var y=0; y < towers.length; y++){
             roleTower.run(towers[y]);
+        }
+    }
+    
+    for(creepSpawn in creepObject){
+        if (!allSpawns.includes(creepSpawn)){
+            for (var y=0; y< creepObject[creepSpawn].length; y++){
+                creep = creepObject[creepSpawn][y];
+                if(creep.memory.role == 'harvester') {
+                    roleHarvester.run(creep);
+                }
+                if(creep.memory.role == 'builder') {
+                    roleCarpenderBee.run(creep);
+                }
+                if(creep.memory.role == 'hauler') {
+                    roleHauler.run(creep);
+                }
+                if(creep.memory.role == 'defender') {
+                    roleDefender.run(creep);
+                }
+                if (creep.memory.role == 'worker') {
+                    roleWorker.run(creep);
+                }
+                if (creep.memory.role == 'scout'){
+                    roleScout.run(creep);
+                }
+                if (creep.memory.role == 'capture'){
+                    roleCapture.run(creep);
+                }
+            }
         }
     }
     

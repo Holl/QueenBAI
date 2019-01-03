@@ -105,11 +105,11 @@ module.exports = function(scanData){
                 }
                 if (harvesterCreeps < 1){
                     console.log("We're building an capture harvester.");
-                    // creepCreator(spawnName, 'harvester', {role:'harvester', 'source':roomSources[0].id, 'spawn': newSpawn}, creepLevel);
+                    creepCreator(spawnName, 'harvester', {role:'harvester', 'source':roomSources[0].id, 'spawn': newSpawn}, creepLevel);
                 }
                 if (workerCreeps < 2){
                     console.log("We're build capture workers.");
-                    // creepCreator(spawnName, 'worker', {role:'worker', 'source':roomSources[0].id, 'spawn': newSpawn}, creepLevel);
+                    creepCreator(spawnName, 'worker', {role:'worker', 'source':roomSources[0].id, 'spawn': newSpawn}, creepLevel);
                 }
             }
         }
