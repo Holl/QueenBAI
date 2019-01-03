@@ -160,10 +160,10 @@ function getBody_Scout(level){
 
 function getBody_Capture(level){
     switch (level){
-        case 1: return [CAPTURE, MOVE];
-        case 2: return [CAPTURE, MOVE];
-        case 3: return [CAPTURE, MOVE];
-        case 4: return [CAPTURE, MOVE];
+        case 1: return [CLAIM, MOVE];
+        case 2: return [CLAIM, MOVE];
+        case 3: return [CLAIM, MOVE];
+        case 4: return [CLAIM, MOVE];
     }
 }
 

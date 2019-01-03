@@ -14,11 +14,30 @@ var create = require('queen.creator');
 module.exports.loop = function () {
     console.log("~~~~~~~~~~"+ Game.time+"~~~~~~~~~~");
     
-    var scanData = scan();
+    creepObject = {};
+    
+    // Because creeps can belong to a spawn even though the creep is in a different room,
+    // this checks all the creeps and organizes them by spawn.
+    for (creep in Game.creeps){
+        if (creepObject[Game.creeps[creep].memory.spawn]){
+            creepObject[Game.creeps[creep].memory.spawn].push(Game.creeps[creep]);
+        }
+        else{
+            creepObject[Game.creeps[creep].memory.spawn] = [Game.creeps[creep]];
+        }
+    };
+
+    var scanData = scan(creepObject);
     
     
     for (var i=0; i < scanData['localData'].length;  i++){
+        // Run the main spawning logic:
         create(scanData['localData'][i]);
+        // Run the orders:
+        for (name in creepObject[scanData['localData'][i]]){
+            console.log(Game.creeps[name]);
+        }
+
         // Room tower orders:
         var towers = Game.spawns[scanData['localData'][i]['spawnName']].room.find(FIND_STRUCTURES,
             {filter: {structureType: STRUCTURE_TOWER}});
