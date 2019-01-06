@@ -61,8 +61,9 @@ module.exports = function(scanData){
         // those come next.
 
         if (scanData['KQSpawns']){
-            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpwans']['name'], flag:scanData['KQSpwans']['flag']}, scanData['KQSpwans']['level'])
+            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpawns']['name'], flag:scanData['KQSpawns']['flag']}, scanData['KQSpawns']['level'])
         }
+
         
         // Management of local territory.
         // We have a list of flags in rooms we want controlled by this spawn,
@@ -182,6 +183,16 @@ function getBody(role, level){
         case "hauler": return getBody_Hauler(level);
         case "scout": return getBody_Scout(level);
         case "capture": return getBody_Capture(level);
+        case "swarm": return getBody_Swarn(level);
+    }
+}
+
+function getBody_swarm(level){
+    switch (level){
+        case 1: return [TOUGH, MOVE, ATTACK];
+        case 2: return [TOUGH, MOVE, ATTACK];
+        case 3: return [TOUGH, MOVE, ATTACK];
+        case 4: return [TOUGH, MOVE, ATTACK];
     }
 }
 

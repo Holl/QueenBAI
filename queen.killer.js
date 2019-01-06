@@ -19,9 +19,12 @@ function swarm(scanData, flag, warCreeps, KQlevel){
 	console.log(checkIfAlreadySpawning(creepName));
 	if (creeps < 1 && !checkIfAlreadySpawning(creepName)){
 	    var index = returnHighestEnergySpawnIndex(scanData['localData']);
-	    scanData['localData'][index]['KQSpawns']['name'] = creepName;
-	    scanData['localData'][index]['KQSpawns']['flag'] = flag;
-	    scanData['localData'][index]['KQSpawns']['level'] = KQlevel;
+	    var warCreepData = {
+	        'name': creepName,
+	        'flag': flag,
+	        'level': KQlevel
+	    }
+	    scanData['localData'][index]['KQSpawns']= warCreepData;
 	}
 
 	for (var i = 0; i < creeps.length; i++){
