@@ -1,28 +1,38 @@
 module.exports = function(scanData, warCreeps){
 	for (flag in Game.flags){
-		var KQMemory = Game.flags[flag].memory.KQ;
+	    var flagMemory = Game.flags[flag].memory;
+		var KQMemory = flagMemory.KQ;
 		if (KQMemory){
+		    var KQlevel = flagMemory.level;
 		    switch (KQMemory){
-		        case "swarm": return swarm(scanData, flag, warCreeps);
-		        case "steady": return steady(scanData, flag, warCreeps);
-		        case "drain": return drain(scanData, flag, warCreeps);
+		        case "swarm": return swarm(scanData, flag, warCreeps, KQlevel);
+		        case "steady": return steady(scanData, flag, warCreeps, KQlevel);
+		        case "drain": return drain(scanData, flag, warCreeps, KQlevel);
 		    }
 		}
 	}
 }
 
-function swarm(scanData, flag, warCreeps){
+function swarm(scanData, flag, warCreeps, KQlevel){
+    creepName = "swarm";
 	var creeps = filterWarcreeps(flag, warCreeps);
-	if (creeps < 1){
-		console.log(scanData['localData'][0]);
+	console.log(checkIfAlreadySpawning(creepName));
+	if (creeps < 1 && !checkIfAlreadySpawning(creepName)){
+	    var index = returnHighestEnergySpawnIndex(scanData['localData']);
+	    scanData['localData'][index]['KQSpawns']['name'] = creepName;
+	    scanData['localData'][index]['KQSpawns']['flag'] = flag;
+	    scanData['localData'][index]['KQSpawns']['level'] = KQlevel;
+	}
+
+	for (var i = 0; i < creeps.length; i++){
+		var creep = Game.creeps[creep[i]];
 	}
 }
-
-function steady(scanData, flag, warCreeps){
+function steady(scanData, flag, warCreeps, KQlevel){
 
 }
 
-function drain(scanData, flag, warCreeps){
+function drain(scanData, flag, warCreeps, KQlevel){
 
 }
 
@@ -34,4 +44,27 @@ function filterWarcreeps(flag, warCreeps){
 		}
 	}
 	return ourCreeps;
+}
+
+function returnHighestEnergySpawnIndex(localScanData){
+    var indexOfHighestEnergy = 0;
+    var highestEnergy = 0;
+    for (var i=0; i<localScanData.length; i++){
+       if (localScanData[i]['energyNow'] > highestEnergy){
+           highestEnergy = localScanData[i]['energyNow'];
+           indexOfHighestEnergy = i;
+       }
+    }
+    return indexOfHighestEnergy;
+}
+
+function checkIfAlreadySpawning(creepName){
+    for (spawn in Game.spawns){
+        if (Game.spawns[spawn].Spawning){
+            if (Game.spawns[spawn].Spawning.name.includes(creepName)){
+                return true;
+            }
+        }
+    }
+    return false;
 }

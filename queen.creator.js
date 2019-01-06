@@ -56,6 +56,13 @@ module.exports = function(scanData){
             console.log("Defense spinning up!");
             creepCreator(spawnName, 'defender', {role:'defender'}, creepLevel); 
         }
+
+        // If we have orders from the Killer Queen,
+        // those come next.
+
+        if (scanData['KQSpawns']){
+            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpwans']['name'], flag:scanData['KQSpwans']['flag']}, scanData['KQSpwans']['level'])
+        }
         
         // Management of local territory.
         // We have a list of flags in rooms we want controlled by this spawn,

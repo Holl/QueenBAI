@@ -40,7 +40,7 @@ module.exports.loop = function () {
     // Because creeps can belong to a spawn even though the creep is in a different room,
     // this checks all the creeps and organizes them by spawn.
     for (creep in Game.creeps){
-        if (creepObecjt[Game.creeps[creep].memory.spawn].memory.empireCreep == 1){
+        if (Game.creeps[creep].memory.empireCreep){
             empireBees.push(creep);
         }
         else if (creepObject[Game.creeps[creep].memory.spawn]){
@@ -50,6 +50,7 @@ module.exports.loop = function () {
             creepObject[Game.creeps[creep].memory.spawn] = [Game.creeps[creep]];
         }
     };
+
 
     var scanData = scan(creepObject);
 
