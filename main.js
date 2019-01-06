@@ -29,16 +29,21 @@ var roleCapture = require("bee.capture");
 
 var scan = require('queen.scan');
 var create = require('queen.creator');
+var killerQueen = require('queen.killer');
 
 module.exports.loop = function () {
     console.log("~~~~~~~~~~"+ Game.time+"~~~~~~~~~~");
     
     creepObject = {};
+    var empireBees = [];
     
     // Because creeps can belong to a spawn even though the creep is in a different room,
     // this checks all the creeps and organizes them by spawn.
     for (creep in Game.creeps){
-        if (creepObject[Game.creeps[creep].memory.spawn]){
+        if (creepObecjt[Game.creeps[creep].memory.spawn].memory.empireCreep == 1){
+            empireBees.push(creep);
+        }
+        else if (creepObject[Game.creeps[creep].memory.spawn]){
             creepObject[Game.creeps[creep].memory.spawn].push(Game.creeps[creep]);
         }
         else{
@@ -47,7 +52,11 @@ module.exports.loop = function () {
     };
 
     var scanData = scan(creepObject);
+
+    var killerOrders = killerQueen(scanData, empireBees);
+
     var allSpawns = [];
+    
     for (var i=0; i < scanData['localData'].length;  i++){
         allSpawns.push(scanData['localData'][i]['spawnName']);
         // Run the main spawning logic:

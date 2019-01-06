@@ -159,6 +159,9 @@ module.exports = function(creepObject){
     	        }
     	    }
     	}
+
+    	var energyNow = Game.spawns[spawn].room.energyAvailable;
+    	var energyMax = Game.spawns[spawn].room.energyCapacityAvailable;
     	
     	
     	
@@ -174,6 +177,8 @@ module.exports = function(creepObject){
 	        "knownTerritory": knownTerritory,
 	        "localSources": localSources,
 	    	"outsideSources": outsideSources,
+	    	"energyNow": energyNow,
+	    	"energyMax": energyMax,
 	        // Creeps:
 	    	"starterCreeps": starterCreeps,
 	    	"workerCreeps": workerCreeps,
