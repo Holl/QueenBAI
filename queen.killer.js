@@ -16,7 +16,7 @@ module.exports = function(scanData, warCreeps){
 function swarm(scanData, flag, warCreeps, KQlevel){
     creepName = "swarm";
 	var creeps = filterWarcreeps(flag, warCreeps);
-	console.log(checkIfAlreadySpawning(creepName));
+	console.log("It is "+ checkIfAlreadySpawning(creepName));
 	if (creeps < 1 && !checkIfAlreadySpawning(creepName)){
 	    var index = returnHighestEnergySpawnIndex(scanData['localData']);
 	    var warCreepData = {
@@ -28,7 +28,7 @@ function swarm(scanData, flag, warCreeps, KQlevel){
 	}
 
 	for (var i = 0; i < creeps.length; i++){
-		var creep = Game.creeps[creep[i]];
+		var creep = Game.creeps[creeps[i]];
 	}
 }
 function steady(scanData, flag, warCreeps, KQlevel){
@@ -42,8 +42,8 @@ function drain(scanData, flag, warCreeps, KQlevel){
 function filterWarcreeps(flag, warCreeps){
 	var ourCreeps = []
 	for (var i = 0; i < warCreeps.length; i++){
-		if (Game.creeps[warCreeps[i]].flag == flag){
-			ourCreeps.push(warCreeps[i]);
+		if (Game.creeps[warCreeps[i]].memory.flag == flag){
+			ourCreeps.push(warCreeps[i]); 
 		}
 	}
 	return ourCreeps;

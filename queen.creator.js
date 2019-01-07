@@ -61,7 +61,7 @@ module.exports = function(scanData){
         // those come next.
 
         if (scanData['KQSpawns']){
-            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpawns']['name'], flag:scanData['KQSpawns']['flag']}, scanData['KQSpawns']['level'])
+            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpawns']['name'], flag:scanData['KQSpawns']['flag'], empireCreep:true}, scanData['KQSpawns']['level'])
         }
 
         
@@ -183,16 +183,16 @@ function getBody(role, level){
         case "hauler": return getBody_Hauler(level);
         case "scout": return getBody_Scout(level);
         case "capture": return getBody_Capture(level);
-        case "swarm": return getBody_Swarn(level);
+        case "swarm": return getBody_Swarm(level);
     }
 }
 
-function getBody_swarm(level){
+function getBody_Swarm(level){
     switch (level){
-        case 1: return [TOUGH, MOVE, ATTACK];
-        case 2: return [TOUGH, MOVE, ATTACK];
-        case 3: return [TOUGH, MOVE, ATTACK];
-        case 4: return [TOUGH, MOVE, ATTACK];
+        case 1: return [TOUGH, MOVE, MOVE, ATTACK];
+        case 2: return [TOUGH, MOVE, MOVE, ATTACK];
+        case 3: return [TOUGH, MOVE, MOVE, ATTACK];
+        case 4: return [TOUGH, MOVE, MOVE, ATTACK];
     }
 }
 
