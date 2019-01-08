@@ -1,3 +1,5 @@
+var roleSwarm = require("bee.swarm");
+
 module.exports = function(scanData, warCreeps){
 	for (flag in Game.flags){
 	    var flagMemory = Game.flags[flag].memory;
@@ -15,9 +17,9 @@ module.exports = function(scanData, warCreeps){
 
 function swarm(scanData, flag, warCreeps, KQlevel){
     creepName = "swarm";
+    creepMax = KQlevel*2;
 	var creeps = filterWarcreeps(flag, warCreeps);
-	console.log("It is "+ checkIfAlreadySpawning(creepName));
-	if (creeps < 1 && !checkIfAlreadySpawning(creepName)){
+	if (creeps.length < creepMax && !checkIfAlreadySpawning(creepName)){
 	    var index = returnHighestEnergySpawnIndex(scanData['localData']);
 	    var warCreepData = {
 	        'name': creepName,
@@ -29,6 +31,13 @@ function swarm(scanData, flag, warCreeps, KQlevel){
 
 	for (var i = 0; i < creeps.length; i++){
 		var creep = Game.creeps[creeps[i]];
+		if (creep.memory.state == "prep"){
+			roleSwarm.prep(creep);
+		}
+		else{
+			roleSwarm.attackMovement(creep); 
+		}
+
 	}
 }
 function steady(scanData, flag, warCreeps, KQlevel){
@@ -63,8 +72,8 @@ function returnHighestEnergySpawnIndex(localScanData){
 
 function checkIfAlreadySpawning(creepName){
     for (spawn in Game.spawns){
-        if (Game.spawns[spawn].Spawning){
-            if (Game.spawns[spawn].Spawning.name.includes(creepName)){
+        if (Game.spawns[spawn].spawning){
+            if (Game.spawns[spawn].spawning.name.includes(creepName)){
                 return true;
             }
         }

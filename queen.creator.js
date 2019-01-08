@@ -61,7 +61,8 @@ module.exports = function(scanData){
         // those come next.
 
         if (scanData['KQSpawns']){
-            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpawns']['name'], flag:scanData['KQSpawns']['flag'], empireCreep:true}, scanData['KQSpawns']['level'])
+            console.log(spawnName + " has orders from KQ to create " + scanData['KQSpawns']['name']);
+            creepCreator(spawnName, scanData['KQSpawns']['name'], {role: scanData['KQSpawns']['name'], state: 'prep', flag:scanData['KQSpawns']['flag'], empireCreep:true}, scanData['KQSpawns']['level'])
         }
 
         
